@@ -1,0 +1,31 @@
+version: '1.0'
+services:
+  db:
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      #- ./dataset:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    networks:
+      - mynetwork
+
+  server:
+    build: .
+    ports:
+      - 4000:4000
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - mynetwork
+
+volumes:
+  db-data:
+
+networks:
+  mynetwork:
